@@ -16,6 +16,7 @@ interface VukaUser {
 export default function DashboardPage() {
   const router = useRouter();
   const [user, setUser] = useState<VukaUser | null>(null);
+  const [greeting, setGreeting] = useState("Welcome");
 
   useEffect(() => {
     const stored = sessionStorage.getItem("vuka_user");
@@ -23,14 +24,16 @@ export default function DashboardPage() {
     setUser(JSON.parse(stored));
   }, [router]);
 
+  useEffect(() => {
+    const hour = new Date().getHours();
+    setGreeting(hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening");
+  }, []);
+
   if (!user) return null;
 
   const firstName = user.name.split(" ")[0];
   const completed = user.lessonsCompleted ?? [];
   const nextLesson = LESSONS.find(l => !completed.includes(l.id));
-
-  const getHour = () => new Date().getHours();
-  const greeting = getHour() < 12 ? "Good morning" : getHour() < 17 ? "Good afternoon" : "Good evening";
 
   return (
     <div style={{ minHeight: "100vh", background: "var(--bg-primary)" }}>
