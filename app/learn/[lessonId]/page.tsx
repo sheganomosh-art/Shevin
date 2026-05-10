@@ -448,7 +448,7 @@ export default function LessonPage() {
                   display: "flex", justifyContent: msg.role === "user" ? "flex-end" : "flex-start",
                 }}>
                   <div style={{
-                    maxWidth: "80%", padding: "10px 14px", borderRadius: 10, fontSize: 14, lineHeight: 1.6,
+                    maxWidth: "80%", padding: "10px 14px", fontSize: 14, lineHeight: 1.6,
                     background: msg.role === "user" ? "var(--accent-green)" : "var(--bg-tertiary)",
                     color: msg.role === "user" ? "#fff" : "var(--text-secondary)",
                     borderRadius: msg.role === "user" ? "10px 10px 2px 10px" : "2px 10px 10px 10px",
