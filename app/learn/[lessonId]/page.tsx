@@ -10,9 +10,61 @@ function renderContent(content: string) {
   const lines = content.trim().split("\n");
   const elements: React.ReactNode[] = [];
   let i = 0;
+  let inActionBlock = false;
+  let actionLines: string[] = [];
+
+  const flushActionBlock = (key: number) => {
+    if (actionLines.length > 0) {
+      elements.push(
+        <div key={`action-${key}`} style={{
+          margin: "32px 0 0",
+          padding: "20px 24px",
+          background: "rgba(35,134,54,0.08)",
+          border: "1px solid rgba(35,134,54,0.25)",
+          borderRadius: 10,
+        }}>
+          <p style={{ fontFamily: "Courier New, monospace", fontSize: 11, textTransform: "uppercase", letterSpacing: "0.12em", color: "var(--accent-green)", marginBottom: 10, fontWeight: 500 }}>
+            Your action for this lesson
+          </p>
+          {actionLines.map((l, idx) => {
+            if (!l.trim()) return null;
+            const numMatch = l.match(/^(\d+)\.\s(.+)/);
+            if (numMatch) {
+              return (
+                <div key={idx} style={{ display: "flex", gap: 10, marginBottom: 8 }}>
+                  <span style={{ fontFamily: "Courier New, monospace", fontSize: 12, color: "var(--accent-green)", minWidth: 20, paddingTop: 2 }}>{numMatch[1]}.</span>
+                  <p style={{ margin: 0, fontSize: 15, color: "var(--text-secondary)", lineHeight: 1.7 }}>{numMatch[2]}</p>
+                </div>
+              );
+            }
+            return <p key={idx} style={{ margin: "0 0 8px", fontSize: 15, color: "var(--text-secondary)", lineHeight: 1.7 }}>{l}</p>;
+          })}
+        </div>
+      );
+      actionLines = [];
+    }
+    inActionBlock = false;
+  };
 
   while (i < lines.length) {
     const line = lines[i];
+
+    if (line.startsWith("## Your action for this lesson")) {
+      if (inActionBlock) flushActionBlock(i);
+      inActionBlock = true;
+      i++;
+      continue;
+    }
+
+    if (inActionBlock) {
+      if (line.startsWith("## ") && !line.includes("Your action")) {
+        flushActionBlock(i);
+      } else {
+        actionLines.push(line);
+        i++;
+        continue;
+      }
+    }
 
     if (line.startsWith("## ")) {
       elements.push(<h2 key={i}>{line.slice(3)}</h2>);
@@ -33,6 +85,16 @@ function renderContent(content: string) {
       const text = lines.slice(i + 1, end).join(" ");
       elements.push(<div key={i} className="tip-block"><strong>💡 Tip:</strong> {text}</div>);
       i = end;
+    } else if (line.match(/^\d+\.\s/)) {
+      const numMatch = line.match(/^(\d+)\.\s(.+)/);
+      if (numMatch) {
+        elements.push(
+          <div key={i} style={{ display: "flex", gap: 10, margin: "6px 0", paddingLeft: 8 }}>
+            <span style={{ fontFamily: "Courier New, monospace", fontSize: 12, color: "var(--text-tertiary)", minWidth: 20, paddingTop: 3 }}>{numMatch[1]}.</span>
+            <p style={{ margin: 0, color: "var(--text-secondary)" }}>{numMatch[2]}</p>
+          </div>
+        );
+      }
     } else if (line.startsWith("- **")) {
       const boldMatch = line.match(/- \*\*(.+?)\*\* — (.+)/);
       if (boldMatch) {
@@ -50,7 +112,6 @@ function renderContent(content: string) {
         </p>
       );
     } else if (line.trim() && !line.startsWith("<")) {
-      // Handle inline bold
       const parts = line.split(/\*\*(.+?)\*\*/g);
       const rendered = parts.map((part, j) =>
         j % 2 === 1 ? <strong key={j} style={{ color: "var(--text-primary)" }}>{part}</strong> : part
@@ -59,6 +120,11 @@ function renderContent(content: string) {
     }
     i++;
   }
+
+  if (inActionBlock && actionLines.length > 0) {
+    flushActionBlock(i);
+  }
+
   return elements;
 }
 
