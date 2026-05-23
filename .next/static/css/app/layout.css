@@ -529,9 +529,6 @@ video {
 .inline-block{
   display: inline-block;
 }
-.inline{
-  display: inline;
-}
 .flex{
   display: flex;
 }
@@ -555,6 +552,9 @@ video {
 }
 .italic{
   font-style: italic;
+}
+.line-through{
+  text-decoration-line: line-through;
 }
 .outline{
   outline-style: solid;

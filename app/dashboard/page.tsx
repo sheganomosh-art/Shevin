@@ -103,60 +103,76 @@ export default function DashboardPage() {
           </div>
         )}
 
-        {/* Lesson list */}
-        <div style={{ marginBottom: 32 }}>
-          <p className="mono-label" style={{ marginBottom: 16 }}>All lessons</p>
-          <div style={{
-            background: "var(--bg-secondary)", border: "1px solid var(--border-default)",
-            borderRadius: 10, overflow: "hidden",
-          }}>
-            {LESSONS.map((lesson, i) => {
-              const isDone = completed.includes(lesson.id);
-              const isCurrent = lesson.id === nextLesson?.id;
-              return (
-                <Link key={lesson.id} href={`/learn/${lesson.id}`} style={{
-                  display: "flex", alignItems: "center", gap: 16,
-                  padding: "16px 20px", textDecoration: "none",
-                  borderBottom: i < LESSONS.length - 1 ? "1px solid var(--border-subtle)" : "none",
-                  background: isCurrent ? "rgba(35,134,54,0.06)" : "transparent",
-                  transition: "background 0.15s",
-                }}>
-                  {/* Status icon */}
-                  <div style={{
-                    width: 24, height: 24, borderRadius: "50%", flexShrink: 0,
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    background: isDone ? "var(--accent-green)" : "transparent",
-                    border: isDone ? "none" : isCurrent ? "1.5px solid var(--accent-green)" : "1.5px solid var(--border-emphasis)",
-                    fontSize: 11,
-                  }}>
-                    {isDone ? (
-                      <span style={{ color: "#fff" }}>✓</span>
-                    ) : (
-                      <span className="mono-label" style={{ fontSize: 10 }}>{lesson.orderIndex}</span>
-                    )}
-                  </div>
+        {/* Learning roadmap */}
+        {(() => {
+          const minsRemaining = LESSONS
+            .filter(l => !completed.includes(l.id))
+            .reduce((sum, l) => sum + l.estimatedMins, 0);
+          return (
+            <div style={{ marginBottom: 32 }}>
+              {/* Roadmap header */}
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 16 }}>
+                <p className="mono-label">Learning roadmap</p>
+                <p className="mono-label" style={{ color: "var(--text-tertiary)" }}>
+                  {completed.length} of 6 complete
+                  {minsRemaining > 0 ? ` · ~${minsRemaining} min left` : ""}
+                </p>
+              </div>
 
-                  <div style={{ flex: 1 }}>
-                    <p style={{
-                      fontSize: 14, fontWeight: 500, margin: "0 0 2px",
-                      color: isDone ? "var(--text-secondary)" : "var(--text-primary)",
+              <div style={{
+                background: "var(--bg-secondary)", border: "1px solid var(--border-default)",
+                borderRadius: 10, overflow: "hidden",
+              }}>
+                {LESSONS.map((lesson, i) => {
+                  const isDone = completed.includes(lesson.id);
+                  const isCurrent = lesson.id === nextLesson?.id;
+                  const isFuture = !isDone && !isCurrent;
+                  return (
+                    <Link key={lesson.id} href={`/learn/${lesson.id}`} style={{
+                      display: "flex", alignItems: "center", gap: 16,
+                      padding: "14px 20px", textDecoration: "none",
+                      borderBottom: i < LESSONS.length - 1 ? "1px solid var(--border-subtle)" : "none",
+                      background: isCurrent ? "rgba(35,134,54,0.05)" : "transparent",
                     }}>
-                      {lesson.title}
-                    </p>
-                    <p className="mono-label">~{lesson.estimatedMins} min</p>
-                  </div>
+                      {/* Status icon */}
+                      <div style={{ width: 22, flexShrink: 0, textAlign: "center" }}>
+                        {isDone && (
+                          <span style={{ fontSize: 15, color: "var(--accent-green)", fontWeight: 700 }}>✓</span>
+                        )}
+                        {isCurrent && (
+                          <span style={{ fontSize: 15, color: "var(--accent-green)", fontWeight: 700 }}>→</span>
+                        )}
+                        {isFuture && (
+                          <span style={{ fontSize: 18, color: "var(--border-emphasis)", lineHeight: 1 }}>·</span>
+                        )}
+                      </div>
 
-                  {isDone && (
-                    <span style={{ fontSize: 12, color: "var(--accent-green)", fontWeight: 500 }}>Done</span>
-                  )}
-                  {isCurrent && (
-                    <span style={{ fontSize: 12, color: "var(--accent-green)", fontWeight: 500 }}>→</span>
-                  )}
-                </Link>
-              );
-            })}
-          </div>
-        </div>
+                      {/* Lesson info */}
+                      <div style={{ flex: 1 }}>
+                        <p style={{
+                          fontSize: 14, fontWeight: isCurrent ? 500 : 400, margin: "0 0 2px",
+                          color: isDone ? "var(--text-tertiary)" : isCurrent ? "var(--text-primary)" : "var(--text-secondary)",
+                          textDecoration: isDone ? "line-through" : "none",
+                        }}>
+                          {lesson.title}
+                        </p>
+                        <p className="mono-label">~{lesson.estimatedMins} min</p>
+                      </div>
+
+                      {/* Right badge */}
+                      {isDone && (
+                        <span style={{ fontFamily: "Courier New, monospace", fontSize: 11, color: "var(--accent-green)", letterSpacing: "0.05em" }}>done</span>
+                      )}
+                      {isCurrent && (
+                        <span style={{ fontFamily: "Courier New, monospace", fontSize: 11, color: "var(--accent-green)", letterSpacing: "0.05em" }}>up next</span>
+                      )}
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })()}
 
         {/* Progress summary */}
         <div style={{
