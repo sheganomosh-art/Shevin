@@ -71,6 +71,9 @@ The NSE is not a savings account. Unlike a fixed deposit or M-Shwari, the value 
 Most Kenyans keep their savings in bank accounts or SACCOs. These are safe but they often earn less than inflation over time — meaning your money is slowly losing purchasing power.
 
 Investing on the NSE has historically provided better returns over the long term. But it comes with risk. This course will help you understand both sides clearly.
+
+## Your action for this lesson
+Go to nse.co.ke right now. Look at the homepage. Find one company name you recognise. Write it down. That company is listed on the NSE — meaning you could own a small piece of it. You do not need to buy anything. Just find one name you know.
     `,
     quiz: [
       {
@@ -213,6 +216,9 @@ All three appear on the official NSE broker list. All three allow you to open a 
 Once your CDS account is active, you can fund it (transfer money from your bank or M-Pesa) and begin placing buy orders for shares. We cover this in Lesson 5.
 
 Opening the account is the most important practical step. Most people who intend to invest never take it.
+
+## Your action for this lesson
+Go to nse.co.ke/broker-list and open the official licensed broker list. Find two brokers you have never heard of and two you recognise. Write down one broker you would consider using. You are not committing to anything — just making the list real in your mind.
     `,
     quiz: [
       {
@@ -347,6 +353,9 @@ Do not try to memorise all these numbers on a single listing. Start by looking a
 Go to **nse.co.ke** → click "Market Data" → search for any listed company. All this information is public and free. You do not need to pay for it.
 
 You can also check the daily share price tables published in the Business Daily newspaper.
+
+## Your action for this lesson
+Go to nse.co.ke, click Market Data, and search for Safaricom (ticker: SCOM). Find these three numbers: the current price, the 52-week high, and the 52-week low. Write them down. You have just read your first real stock listing.
     `,
     quiz: [
       {
@@ -475,6 +484,9 @@ A practical rule used by many beginner investors: never invest more than you cou
 Despite significant drops in 2008, 2011, 2015, and 2020 — the NSE has generated positive returns for patient, diversified investors over long periods. This does not guarantee future performance. But it provides historical context.
 
 Patience is not a passive strategy. It is an active, deliberate choice to not react to short-term noise.
+
+## Your action for this lesson
+Answer this honestly in your head or write it down: If you invested KES 20,000 and it dropped to KES 14,000 in three months — what would you do? There is no right answer. But knowing your honest answer tells you how much you should start with. Only invest what you can watch fall without panicking.
     `,
     quiz: [
       {
@@ -629,6 +641,9 @@ Log into your CDS account after 3 business days and confirm the shares appear. K
 - On what date
 
 This becomes your reference point for tracking your investment going forward.
+
+## Your action for this lesson
+Go to nse.co.ke/broker-list and pick one licensed broker. Visit their actual website. Find out two things: what their minimum investment amount is and whether they accept M-Pesa. Write both down. You are not opening an account yet — you are just making it real.
     `,
     quiz: [
       {
@@ -785,6 +800,13 @@ You started this course not knowing what the NSE was. You now know:
 That is the foundation. What you do with it is yours to decide.
 
 The CDSC and NSE websites have everything you need to take the next step. Go at your own pace. Invest only what you can genuinely afford. And verify everything before trusting anyone with your money.
+
+## Your action for this lesson
+You have completed the NSE Foundations course. Write down three things:
+1. The broker you would use to open your CDS account
+2. The first company you would research before buying shares
+3. The amount you could genuinely afford to invest without it affecting your life
+You do not need to act on any of these today. But writing them down moves you from thinking about investing to planning it. That is the real difference.
     `,
     quiz: [
       {

@@ -1,0 +1,31 @@
+Please add "Your action for this lesson" sections to all 6 lessons in content/lessons.ts. Add each one at the very end of the content field, just before the closing backtick of that lesson's content.
+
+Lesson 1 (what-is-nse) — add this:
+## Your action for this lesson
+Go to nse.co.ke right now. Look at the homepage. Find one company name you recognise. Write it down. That company is listed on the NSE — meaning you could own a small piece of it. You do not need to buy anything. Just find one name you know.
+
+Lesson 2 (cds-accounts) — add this:
+## Your action for this lesson
+Go to nse.co.ke/broker-list and open the official licensed broker list. Find two brokers you have never heard of and two you recognise. Write down one broker you would consider using. You are not committing to anything — just making the list real in your mind.
+
+Lesson 3 (reading-listings) — add this:
+## Your action for this lesson
+Go to nse.co.ke, click Market Data, and search for Safaricom (ticker: SCOM). Find these three numbers: the current price, the 52-week high, and the 52-week low. Write them down. You have just read your first real stock listing.
+
+Lesson 4 (price-movements) — add this:
+## Your action for this lesson
+Answer this honestly in your head or write it down: If you invested KES 20,000 and it dropped to KES 14,000 in three months — what would you do? There is no right answer. But knowing your honest answer tells you how much you should start with. Only invest what you can watch fall without panicking.
+
+Lesson 5 (first-order) — add this:
+## Your action for this lesson
+Go to nse.co.ke/broker-list and pick one licensed broker. Visit their actual website. Find out two things: what their minimum investment amount is and whether they accept M-Pesa. Write both down. You are not opening an account yet — you are just making it real.
+
+Lesson 6 (after-investing) — add this:
+## Your action for this lesson
+You have completed the NSE Foundations course. Write down three things:
+1. The broker you would use to open your CDS account
+2. The first company you would research before buying shares
+3. The amount you could genuinely afford to invest without it affecting your life
+You do not need to act on any of these today. But writing them down moves you from thinking about investing to planning it. That is the real difference.
+
+After adding all 6, push to GitHub with commit message "add action tasks to all 6 lessons".
