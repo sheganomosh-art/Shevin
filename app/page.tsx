@@ -62,24 +62,24 @@ export default function HomePage() {
 
       {/* HERO */}
       <section style={{ maxWidth: 680, margin: "0 auto", padding: "80px 24px 64px" }}>
-        <motion.p custom={0} initial="hidden" animate="visible" variants={fadeUp}
+        <motion.p custom={0} initial={false} animate="visible" variants={fadeUp}
           className="mono-label" style={{ marginBottom: 24 }}>
           NSE Investing Education · Nairobi, Kenya
         </motion.p>
 
-        <motion.h1 custom={1} initial="hidden" animate="visible" variants={fadeUp}
+        <motion.h1 custom={1} initial={false} animate="visible" variants={fadeUp}
           style={{ fontFamily: "Georgia, serif", fontSize: "clamp(32px, 6vw, 52px)", fontWeight: 400, lineHeight: 1.1, marginBottom: 24, color: "var(--text-primary)" }}>
           Learn to invest on the<br />Nairobi Stock Exchange.
         </motion.h1>
 
-        <motion.p custom={2} initial="hidden" animate="visible" variants={fadeUp}
+        <motion.p custom={2} initial={false} animate="visible" variants={fadeUp}
           style={{ fontSize: 18, lineHeight: 1.75, color: "var(--text-secondary)", marginBottom: 16 }}>
           A free, structured course for Kenyan beginners.
           Six lessons. No jargon. No broker commissions.
           No financial products sold.
         </motion.p>
 
-        <motion.div custom={3} initial="hidden" animate="visible" variants={fadeUp}
+        <motion.div custom={3} initial={false} animate="visible" variants={fadeUp}
           style={{ marginTop: 36, display: "flex", flexDirection: "column", gap: 12, alignItems: "flex-start" }}>
           <Link href="/auth/signup" style={{
             background: "var(--accent-green)", color: "#fff",
