@@ -3,6 +3,7 @@ import { useEffect, useState, useRef } from "react";
 import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
 import { getLessonById, getNextLesson, LESSON_COMPLETE_MESSAGES } from "@/content/lessons";
+import { createClient } from "@/lib/supabase/client";
 
 type PageState = "reading" | "quiz" | "passed" | "failed";
 
@@ -147,7 +148,12 @@ export default function LessonPage() {
   const contentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!sessionStorage.getItem("vuka_user")) router.push("/auth/login");
+    const checkAuth = async () => {
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) router.push("/auth/login");
+    };
+    checkAuth();
   }, [router]);
 
   // Scroll depth tracking — unlocks quiz at 80%
@@ -168,7 +174,7 @@ export default function LessonPage() {
 
   const allAnswered = lesson.quiz.every(q => selectedAnswers[q.id]);
 
-  const handleSubmitQuiz = () => {
+  const handleSubmitQuiz = async () => {
     let correct = 0;
     lesson.quiz.forEach(q => { if (selectedAnswers[q.id] === q.correctId) correct++; });
     setScore(correct);
@@ -177,13 +183,14 @@ export default function LessonPage() {
     setPageState(passed ? "passed" : "failed");
 
     if (passed) {
-      const stored = sessionStorage.getItem("vuka_user");
-      if (stored) {
-        const user = JSON.parse(stored);
-        const completed = user.lessonsCompleted ?? [];
-        if (!completed.includes(lesson.id)) {
-          user.lessonsCompleted = [...completed, lesson.id];
-          sessionStorage.setItem("vuka_user", JSON.stringify(user));
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const currentCompleted: string[] = user.user_metadata?.lessonsCompleted ?? [];
+        if (!currentCompleted.includes(lesson.id)) {
+          await supabase.auth.updateUser({
+            data: { lessonsCompleted: [...currentCompleted, lesson.id] },
+          });
         }
       }
     }

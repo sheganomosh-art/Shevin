@@ -2,6 +2,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -46,12 +47,25 @@ export default function SignupPage() {
     e.preventDefault();
     if (!experience) { setError("Please select your experience level."); return; }
     setLoading(true);
-    // Store in sessionStorage for demo — replace with Supabase in production
-    sessionStorage.setItem("vuka_user", JSON.stringify({
-      name, email, goal, experience,
-      lessonsCompleted: [],
-      joinedDate: new Date().toLocaleDateString("en-GB", { month: "long", year: "numeric" }),
-    }));
+    setError("");
+
+    const supabase = createClient();
+    const joinedDate = new Date().toLocaleDateString("en-GB", { month: "long", year: "numeric" });
+
+    const { error: signUpError } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: { name, goal, experience, lessonsCompleted: [], joinedDate },
+      },
+    });
+
+    if (signUpError) {
+      setError(signUpError.message);
+      setLoading(false);
+      return;
+    }
+
     router.push("/dashboard");
   };
 

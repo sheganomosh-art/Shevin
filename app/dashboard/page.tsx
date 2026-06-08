@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { LESSONS } from "@/content/lessons";
+import { createClient } from "@/lib/supabase/client";
 
 interface VukaUser {
   name: string;
@@ -19,15 +20,33 @@ export default function DashboardPage() {
   const [greeting, setGreeting] = useState("Welcome");
 
   useEffect(() => {
-    const stored = sessionStorage.getItem("vuka_user");
-    if (!stored) { router.push("/auth/login"); return; }
-    setUser(JSON.parse(stored));
-  }, [router]);
-
-  useEffect(() => {
     const hour = new Date().getHours();
     setGreeting(hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening");
   }, []);
+
+  useEffect(() => {
+    const getUser = async () => {
+      const supabase = createClient();
+      const { data: { user: authUser } } = await supabase.auth.getUser();
+      if (!authUser) { router.push("/auth/login"); return; }
+      const meta = authUser.user_metadata ?? {};
+      setUser({
+        name: meta.name ?? authUser.email ?? "Learner",
+        email: authUser.email ?? "",
+        goal: meta.goal ?? "learn",
+        experience: meta.experience ?? "none",
+        lessonsCompleted: meta.lessonsCompleted ?? [],
+        joinedDate: meta.joinedDate ?? new Date(authUser.created_at).toLocaleDateString("en-GB", { month: "long", year: "numeric" }),
+      });
+    };
+    getUser();
+  }, [router]);
+
+  const handleSignOut = async () => {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    router.push("/");
+  };
 
   if (!user) return null;
 
@@ -48,7 +67,7 @@ export default function DashboardPage() {
         <Link href="/" style={{ fontFamily: "Georgia, serif", fontSize: 20, color: "var(--text-primary)", textDecoration: "none" }}>Vuka</Link>
         <div style={{ display: "flex", gap: 24, alignItems: "center" }}>
           <Link href="/profile" style={{ fontSize: 14, color: "var(--text-secondary)", textDecoration: "none" }}>Profile</Link>
-          <button onClick={() => { sessionStorage.removeItem("vuka_user"); router.push("/"); }}
+          <button onClick={handleSignOut}
             style={{ fontSize: 14, color: "var(--text-tertiary)", background: "none", border: "none", cursor: "pointer", fontFamily: "inherit" }}>
             Sign out
           </button>
@@ -110,7 +129,6 @@ export default function DashboardPage() {
             .reduce((sum, l) => sum + l.estimatedMins, 0);
           return (
             <div style={{ marginBottom: 32 }}>
-              {/* Roadmap header */}
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 16 }}>
                 <p className="mono-label">Learning roadmap</p>
                 <p className="mono-label" style={{ color: "var(--text-tertiary)" }}>
@@ -134,20 +152,11 @@ export default function DashboardPage() {
                       borderBottom: i < LESSONS.length - 1 ? "1px solid var(--border-subtle)" : "none",
                       background: isCurrent ? "rgba(35,134,54,0.05)" : "transparent",
                     }}>
-                      {/* Status icon */}
                       <div style={{ width: 22, flexShrink: 0, textAlign: "center" }}>
-                        {isDone && (
-                          <span style={{ fontSize: 15, color: "var(--accent-green)", fontWeight: 700 }}>✓</span>
-                        )}
-                        {isCurrent && (
-                          <span style={{ fontSize: 15, color: "var(--accent-green)", fontWeight: 700 }}>→</span>
-                        )}
-                        {isFuture && (
-                          <span style={{ fontSize: 18, color: "var(--border-emphasis)", lineHeight: 1 }}>·</span>
-                        )}
+                        {isDone && <span style={{ fontSize: 15, color: "var(--accent-green)", fontWeight: 700 }}>✓</span>}
+                        {isCurrent && <span style={{ fontSize: 15, color: "var(--accent-green)", fontWeight: 700 }}>→</span>}
+                        {isFuture && <span style={{ fontSize: 18, color: "var(--border-emphasis)", lineHeight: 1 }}>·</span>}
                       </div>
-
-                      {/* Lesson info */}
                       <div style={{ flex: 1 }}>
                         <p style={{
                           fontSize: 14, fontWeight: isCurrent ? 500 : 400, margin: "0 0 2px",
@@ -158,14 +167,8 @@ export default function DashboardPage() {
                         </p>
                         <p className="mono-label">~{lesson.estimatedMins} min</p>
                       </div>
-
-                      {/* Right badge */}
-                      {isDone && (
-                        <span style={{ fontFamily: "Courier New, monospace", fontSize: 11, color: "var(--accent-green)", letterSpacing: "0.05em" }}>done</span>
-                      )}
-                      {isCurrent && (
-                        <span style={{ fontFamily: "Courier New, monospace", fontSize: 11, color: "var(--accent-green)", letterSpacing: "0.05em" }}>up next</span>
-                      )}
+                      {isDone && <span style={{ fontFamily: "Courier New, monospace", fontSize: 11, color: "var(--accent-green)", letterSpacing: "0.05em" }}>done</span>}
+                      {isCurrent && <span style={{ fontFamily: "Courier New, monospace", fontSize: 11, color: "var(--accent-green)", letterSpacing: "0.05em" }}>up next</span>}
                     </Link>
                   );
                 })}

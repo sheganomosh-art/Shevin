@@ -2,12 +2,14 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
 
 export default function LoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const inputStyle = {
     width: "100%", background: "var(--bg-tertiary)",
@@ -16,23 +18,21 @@ export default function LoginPage() {
     fontFamily: "inherit", outline: "none",
   } as React.CSSProperties;
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !password) { setError("Please fill in all fields."); return; }
-    const stored = sessionStorage.getItem("vuka_user");
-    if (stored) {
-      const user = JSON.parse(stored);
-      if (user.email === email) {
-        router.push("/dashboard");
-        return;
-      }
+    setLoading(true);
+    setError("");
+
+    const supabase = createClient();
+    const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+
+    if (signInError) {
+      setError("Incorrect email or password.");
+      setLoading(false);
+      return;
     }
-    // Demo fallback
-    sessionStorage.setItem("vuka_user", JSON.stringify({
-      name: "Demo User", email, goal: "learn", experience: "none",
-      lessonsCompleted: [],
-      joinedDate: new Date().toLocaleDateString("en-GB", { month: "long", year: "numeric" }),
-    }));
+
     router.push("/dashboard");
   };
 
@@ -56,12 +56,16 @@ export default function LoginPage() {
             <input style={inputStyle} type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="••••••••" />
           </div>
           {error && <p style={{ color: "var(--error)", fontSize: 13 }}>{error}</p>}
-          <button type="submit" style={{ background: "var(--accent-green)", color: "#fff", border: "none", borderRadius: 8, padding: "12px", fontSize: 15, fontWeight: 500, cursor: "pointer", fontFamily: "inherit", marginTop: 8 }}>
-            Sign in
+          <button type="submit" disabled={loading} style={{
+            background: "var(--accent-green)", color: "#fff", border: "none", borderRadius: 8,
+            padding: "12px", fontSize: 15, fontWeight: 500, cursor: "pointer",
+            fontFamily: "inherit", marginTop: 8, opacity: loading ? 0.6 : 1,
+          }}>
+            {loading ? "Signing in..." : "Sign in"}
           </button>
         </form>
         <p style={{ textAlign: "center", fontSize: 13, color: "var(--text-tertiary)", marginTop: 24 }}>
-          Don't have an account?{" "}
+          Don&apos;t have an account?{" "}
           <Link href="/auth/signup" style={{ color: "var(--accent-green)", textDecoration: "none" }}>Create one free</Link>
         </p>
       </div>

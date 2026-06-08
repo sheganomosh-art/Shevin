@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { LESSONS } from "@/content/lessons";
+import { createClient } from "@/lib/supabase/client";
 
 interface VukaUser {
   name: string; email: string; goal: string;
@@ -23,9 +24,21 @@ export default function ProfilePage() {
   const [user, setUser] = useState<VukaUser | null>(null);
 
   useEffect(() => {
-    const stored = sessionStorage.getItem("vuka_user");
-    if (!stored) { router.push("/auth/login"); return; }
-    setUser(JSON.parse(stored));
+    const getUser = async () => {
+      const supabase = createClient();
+      const { data: { user: authUser } } = await supabase.auth.getUser();
+      if (!authUser) { router.push("/auth/login"); return; }
+      const meta = authUser.user_metadata ?? {};
+      setUser({
+        name: meta.name ?? authUser.email ?? "Learner",
+        email: authUser.email ?? "",
+        goal: meta.goal ?? "learn",
+        experience: meta.experience ?? "none",
+        lessonsCompleted: meta.lessonsCompleted ?? [],
+        joinedDate: meta.joinedDate ?? new Date(authUser.created_at).toLocaleDateString("en-GB", { month: "long", year: "numeric" }),
+      });
+    };
+    getUser();
   }, [router]);
 
   if (!user) return null;
@@ -72,7 +85,7 @@ export default function ProfilePage() {
           <div style={{ height: 6, background: "var(--bg-overlay)", borderRadius: 3, overflow: "hidden" }}>
             <div style={{
               height: "100%", borderRadius: 3,
-              background: completed.length === 6 ? "var(--accent-green)" : "var(--accent-green)",
+              background: "var(--accent-green)",
               width: `${(completed.length / 6) * 100}%`,
               transition: "width 0.5s ease",
             }} />
