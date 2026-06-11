@@ -1,0 +1,2 @@
+- [GitHub push token](github-push.md) — use GITHUB_PERSONAL_ACCESS_TOKEN, not GITHUB_TOKEN (expired/insufficient)
+- [Supabase signup issues](supabase-signup.md) — trigger + email confirm caused "Database error saving new user"; drop triggers and disable confirm to unblock
