@@ -56,7 +56,7 @@ export default function SignupPage() {
       email,
       password,
       options: {
-        data: { name, goal, experience, lessonsCompleted: [], joinedDate },
+        data: { name, full_name: name, goal, experience, lessonsCompleted: [], joinedDate },
       },
     });
 
