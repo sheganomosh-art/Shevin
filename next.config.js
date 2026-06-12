@@ -1,3 +1,9 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = {
+  allowedDevOrigins: [
+    "*.replit.dev",
+    "*.worf.replit.dev",
+    "*.repl.co",
+  ],
+};
 module.exports = nextConfig;
