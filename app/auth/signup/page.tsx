@@ -102,6 +102,7 @@ export default function SignupPage() {
       email,
       password,
       options: {
+        emailRedirectTo: "https://vuka-nine.vercel.app/auth/callback",
         data: { name, full_name: name, goal, experience, lessonsCompleted: [], joinedDate },
       },
     });
