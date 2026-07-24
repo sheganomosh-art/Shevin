@@ -1,0 +1,8 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "AfyzRY86q1bY2GCsVPA-O"
+uri = "file://index.html"
+type = "unspecified"
+title = "index.html"
