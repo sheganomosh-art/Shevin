@@ -71,18 +71,45 @@ export default function HomePage() {
 
   return (
     <div style={{ background: "var(--bg-primary)", minHeight: "100vh" }}>
+      <style>{`
+        .hero-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 60px;
+          align-items: center;
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 80px 40px;
+        }
+        .hero-image-col {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+        @media (max-width: 860px) {
+          .hero-grid {
+            grid-template-columns: 1fr;
+            gap: 48px;
+            padding: 64px 24px;
+          }
+          .hero-image-col {
+            display: none;
+          }
+        }
+      `}</style>
 
       {/* ── NAVBAR ── */}
       <nav style={{
         position: "sticky", top: 0, zIndex: 50,
         background: "rgba(15,10,6,0.92)", backdropFilter: "blur(16px)",
         borderBottom: "1px solid rgba(196,87,42,0.2)",
-        height: 60, display: "flex", alignItems: "center",
+        height: 68, display: "flex", alignItems: "center",
         justifyContent: "space-between", padding: "0 28px",
       }}>
         <span style={{
           fontFamily: "'Playfair Display', Georgia, serif",
-          fontSize: 24, fontWeight: 700,
+          fontSize: 32, fontWeight: 900,
+          letterSpacing: "-0.01em",
           background: "linear-gradient(135deg, #C4572A, #F5B731)",
           WebkitBackgroundClip: "text",
           WebkitTextFillColor: "transparent",
@@ -103,77 +130,111 @@ export default function HomePage() {
       {/* ── HERO ── */}
       <section style={{ position: "relative", overflow: "hidden", minHeight: "92vh", display: "flex", alignItems: "center" }}>
 
-        {/* Unsplash background photo */}
+        {/* Dark gradient overlay */}
         <div style={{
           position: "absolute", inset: 0,
-          backgroundImage: "url('https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&w=1600&q=80')",
-          backgroundSize: "cover", backgroundPosition: "center",
-          opacity: 0.12,
-        }} />
-
-        {/* Dark gradient overlay — left heavy so text is readable */}
-        <div style={{
-          position: "absolute", inset: 0,
-          background: "linear-gradient(105deg, rgba(15,10,6,0.97) 50%, rgba(196,87,42,0.25) 100%)",
+          background: "linear-gradient(105deg, rgba(15,10,6,0.99) 40%, rgba(26,16,8,0.92) 100%)",
         }} />
 
         {/* African geometric pattern */}
         <AfricanPattern opacity={0.09} />
 
-        {/* Glow orb — terracotta */}
+        {/* Glow orb — terracotta top-right */}
         <div style={{
-          position: "absolute", top: "10%", right: "5%",
-          width: 520, height: 520, borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(196,87,42,0.18) 0%, transparent 70%)",
+          position: "absolute", top: "5%", right: "2%",
+          width: 480, height: 480, borderRadius: "50%",
+          background: "radial-gradient(circle, rgba(196,87,42,0.15) 0%, transparent 70%)",
           pointerEvents: "none",
         }} />
-        {/* Glow orb — gold */}
+        {/* Glow orb — gold bottom */}
         <div style={{
-          position: "absolute", bottom: "5%", right: "25%",
+          position: "absolute", bottom: "5%", left: "30%",
           width: 360, height: 360, borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(245,183,49,0.10) 0%, transparent 70%)",
+          background: "radial-gradient(circle, rgba(245,183,49,0.08) 0%, transparent 70%)",
           pointerEvents: "none",
         }} />
 
-        {/* Content */}
-        <div style={{ position: "relative", zIndex: 1, maxWidth: 740, margin: "0 auto", padding: "80px 28px" }}>
-          <p className="mono-label" style={{ marginBottom: 20, color: "var(--accent-amber)", letterSpacing: "0.16em" }}>
-            NSE Investing Education · Nairobi, Kenya
-          </p>
+        {/* Two-column content grid */}
+        <div className="hero-grid" style={{ position: "relative", zIndex: 1, width: "100%" }}>
 
-          <h1 style={{
-            fontFamily: "'Playfair Display', Georgia, serif",
-            fontSize: "clamp(40px, 7vw, 72px)",
-            fontWeight: 900, lineHeight: 1.05, marginBottom: 28,
-            background: "linear-gradient(135deg, #F5ECD8 30%, #F5B731 100%)",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-            backgroundClip: "text",
-          }}>
-            Learn to invest on the<br />Nairobi Stock Exchange.
-          </h1>
-
-          <p style={{ fontSize: 18, lineHeight: 1.8, color: "var(--text-secondary)", marginBottom: 12, maxWidth: 560 }}>
-            A free, structured course for Kenyan beginners.
-            Six lessons. No jargon. No broker commissions.
-            No financial products sold.
-          </p>
-
-          <div style={{ marginTop: 40, display: "flex", flexDirection: "column", gap: 14, alignItems: "flex-start" }}>
-            <Link href="/auth/signup" style={{
-              background: "linear-gradient(135deg, #C4572A 0%, #F5B731 100%)",
-              color: "#0F0A06",
-              padding: "14px 36px", borderRadius: 8, textDecoration: "none",
-              fontSize: 16, fontWeight: 700, display: "inline-block",
-              boxShadow: "0 4px 24px rgba(196,87,42,0.35)",
-              transition: "transform 0.15s, box-shadow 0.15s",
-            }}>
-              Begin the course →
-            </Link>
-            <p style={{ fontSize: 13, color: "var(--text-tertiary)", margin: 0 }}>
-              Free to start. No credit card. No broker account needed.
+          {/* Left — text */}
+          <div>
+            <p className="mono-label" style={{ marginBottom: 20, color: "var(--accent-amber)", letterSpacing: "0.16em" }}>
+              NSE Investing Education · Nairobi, Kenya
             </p>
+
+            <h1 style={{
+              fontFamily: "'Playfair Display', Georgia, serif",
+              fontSize: "clamp(38px, 5.5vw, 68px)",
+              fontWeight: 900, lineHeight: 1.06, marginBottom: 28,
+              background: "linear-gradient(135deg, #F5ECD8 30%, #F5B731 100%)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
+            }}>
+              Learn to invest on the<br />Nairobi Stock Exchange.
+            </h1>
+
+            <p style={{ fontSize: 18, lineHeight: 1.8, color: "var(--text-secondary)", marginBottom: 12, maxWidth: 520 }}>
+              A free, structured course for Kenyan beginners.
+              Six lessons. No jargon. No broker commissions.
+              No financial products sold.
+            </p>
+
+            <div style={{ marginTop: 40, display: "flex", flexDirection: "column", gap: 14, alignItems: "flex-start" }}>
+              <Link href="/auth/signup" style={{
+                background: "linear-gradient(135deg, #C4572A 0%, #F5B731 100%)",
+                color: "#0F0A06",
+                padding: "14px 36px", borderRadius: 8, textDecoration: "none",
+                fontSize: 16, fontWeight: 700, display: "inline-block",
+                boxShadow: "0 4px 24px rgba(196,87,42,0.35)",
+                transition: "transform 0.15s, box-shadow 0.15s",
+              }}>
+                Begin the course →
+              </Link>
+              <p style={{ fontSize: 13, color: "var(--text-tertiary)", margin: 0 }}>
+                Free to start. No credit card. No broker account needed.
+              </p>
+            </div>
           </div>
+
+          {/* Right — hero image */}
+          <div className="hero-image-col">
+            <div style={{ position: "relative", width: "100%", maxWidth: 520 }}>
+              {/* Glow behind image */}
+              <div style={{
+                position: "absolute", inset: -24,
+                background: "radial-gradient(ellipse at center, rgba(196,87,42,0.22) 0%, transparent 70%)",
+                borderRadius: 24, pointerEvents: "none",
+              }} />
+              {/* Image */}
+              <img
+                src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=85"
+                alt="Laptop displaying financial market charts"
+                style={{
+                  width: "100%",
+                  borderRadius: 20,
+                  display: "block",
+                  border: "1px solid rgba(196,87,42,0.25)",
+                  boxShadow: "0 24px 64px rgba(0,0,0,0.5), 0 0 0 1px rgba(245,183,49,0.08)",
+                  objectFit: "cover",
+                  aspectRatio: "4 / 5",
+                }}
+              />
+              {/* Floating stat badge */}
+              <div style={{
+                position: "absolute", bottom: 24, left: -28,
+                background: "rgba(26,16,8,0.92)", backdropFilter: "blur(12px)",
+                border: "1px solid rgba(196,87,42,0.35)",
+                borderRadius: 12, padding: "14px 20px",
+                boxShadow: "0 8px 24px rgba(0,0,0,0.4)",
+              }}>
+                <p style={{ margin: 0, fontSize: 11, color: "var(--accent-amber)", letterSpacing: "0.12em", fontFamily: "Courier New, monospace" }}>NSE 20 SHARE INDEX</p>
+                <p style={{ margin: "4px 0 0", fontSize: 20, fontWeight: 700, color: "var(--text-primary)", fontFamily: "'Playfair Display', serif" }}>1,847 <span style={{ color: "#4ade80", fontSize: 13, fontWeight: 500 }}>↑ 2.4%</span></p>
+              </div>
+            </div>
+          </div>
+
         </div>
       </section>
 
