@@ -10,5 +10,5 @@ export async function GET(request: NextRequest) {
     await supabase.auth.exchangeCodeForSession(code);
   }
 
-  return NextResponse.redirect("https://vuka-nine.vercel.app/dashboard");
+  return NextResponse.redirect("https://vuka-pao338shy-sheganomosh-4247s-projects.vercel.app/dashboard");
 }
