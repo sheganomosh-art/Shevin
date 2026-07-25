@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { LESSONS } from "@/content/lessons";
-import { createClient } from "@/lib/supabase/client";
 
 interface VukaUser {
   name: string; email: string; goal: string;
@@ -24,21 +23,9 @@ export default function ProfilePage() {
   const [user, setUser] = useState<VukaUser | null>(null);
 
   useEffect(() => {
-    const getUser = async () => {
-      const supabase = createClient();
-      const { data: { user: authUser } } = await supabase.auth.getUser();
-      if (!authUser) { router.push("/auth/login"); return; }
-      const meta = authUser.user_metadata ?? {};
-      setUser({
-        name: meta.name ?? authUser.email ?? "Learner",
-        email: authUser.email ?? "",
-        goal: meta.goal ?? "learn",
-        experience: meta.experience ?? "none",
-        lessonsCompleted: meta.lessonsCompleted ?? [],
-        joinedDate: meta.joinedDate ?? new Date(authUser.created_at).toLocaleDateString("en-GB", { month: "long", year: "numeric" }),
-      });
-    };
-    getUser();
+    const stored = localStorage.getItem("vuka_user");
+    if (!stored) { router.push("/auth/login"); return; }
+    setUser(JSON.parse(stored));
   }, [router]);
 
   if (!user) return null;

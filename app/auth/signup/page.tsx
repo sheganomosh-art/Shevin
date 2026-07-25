@@ -2,7 +2,6 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { createClient } from "@/lib/supabase/client";
 
 const labelStyle = {
   display: "block",
@@ -95,24 +94,11 @@ export default function SignupPage() {
     setLoading(true);
     setError("");
 
-    const supabase = createClient();
     const joinedDate = new Date().toLocaleDateString("en-GB", { month: "long", year: "numeric" });
+    localStorage.setItem("vuka_user", JSON.stringify({
+      name, email, goal, experience, lessonsCompleted: [], joinedDate,
+    }));
 
-    const { error: signUpError } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: { name, full_name: name, goal, experience, lessonsCompleted: [], joinedDate },
-      },
-    });
-
-    if (signUpError) {
-      setError(signUpError.message);
-      setLoading(false);
-      return;
-    }
-
-    router.refresh();
     router.push("/dashboard");
   };
 

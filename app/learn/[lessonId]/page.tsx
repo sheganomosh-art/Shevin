@@ -3,7 +3,6 @@ import { useEffect, useState, useRef } from "react";
 import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
 import { getLessonById, getNextLesson, LESSON_COMPLETE_MESSAGES } from "@/content/lessons";
-import { createClient } from "@/lib/supabase/client";
 
 type PageState = "reading" | "quiz" | "passed" | "failed";
 
@@ -148,12 +147,7 @@ export default function LessonPage() {
   const contentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const checkAuth = async () => {
-      const supabase = createClient();
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) router.push("/auth/login");
-    };
-    checkAuth();
+    if (!localStorage.getItem("vuka_user")) router.push("/auth/login");
   }, [router]);
 
   // Scroll depth tracking — unlocks quiz at 80%
@@ -183,14 +177,13 @@ export default function LessonPage() {
     setPageState(passed ? "passed" : "failed");
 
     if (passed) {
-      const supabase = createClient();
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        const currentCompleted: string[] = user.user_metadata?.lessonsCompleted ?? [];
+      const stored = localStorage.getItem("vuka_user");
+      if (stored) {
+        const userData = JSON.parse(stored);
+        const currentCompleted: string[] = userData.lessonsCompleted ?? [];
         if (!currentCompleted.includes(lesson.id)) {
-          await supabase.auth.updateUser({
-            data: { lessonsCompleted: [...currentCompleted, lesson.id] },
-          });
+          userData.lessonsCompleted = [...currentCompleted, lesson.id];
+          localStorage.setItem("vuka_user", JSON.stringify(userData));
         }
       }
     }

@@ -2,7 +2,6 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { createClient } from "@/lib/supabase/client";
 
 const labelStyle = {
   display: "block",
@@ -33,22 +32,26 @@ export default function LoginPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !password) { setError("Please fill in both fields."); return; }
     setLoading(true);
     setError("");
 
-    const supabase = createClient();
-    const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+    const stored = localStorage.getItem("vuka_user");
+    if (!stored) {
+      setError("No account found. Please sign up first.");
+      setLoading(false);
+      return;
+    }
 
-    if (signInError) {
+    const user = JSON.parse(stored);
+    if (user.email !== email) {
       setError("Incorrect email or password.");
       setLoading(false);
       return;
     }
 
-    router.refresh();
     router.push("/dashboard");
   };
 
