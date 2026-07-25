@@ -34,91 +34,196 @@ const LESSONS_PREVIEW = [
   { num: "06", title: "After You Invest", desc: "Reading your CDS statement, understanding dividends, and what to do when prices fall.", time: "~20 min" },
 ];
 
+/* African geometric SVG pattern — kente-inspired diamonds */
+function AfricanPattern({ opacity = 0.07 }: { opacity?: number }) {
+  return (
+    <svg
+      style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none" }}
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <defs>
+        <pattern id="kente" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse">
+          {/* Outer diamond */}
+          <polygon points="40,4 76,40 40,76 4,40" fill="none" stroke="#C4572A" strokeWidth="1" opacity="0.6" />
+          {/* Inner diamond */}
+          <polygon points="40,20 60,40 40,60 20,40" fill="none" stroke="#F5B731" strokeWidth="0.8" opacity="0.5" />
+          {/* Corner triangles */}
+          <polygon points="0,0 12,0 0,12" fill="#C4572A" opacity="0.15" />
+          <polygon points="80,0 80,12 68,0" fill="#C4572A" opacity="0.15" />
+          <polygon points="0,80 12,80 0,68" fill="#C4572A" opacity="0.15" />
+          <polygon points="80,80 68,80 80,68" fill="#C4572A" opacity="0.15" />
+          {/* Centre dot */}
+          <circle cx="40" cy="40" r="2.5" fill="#F5B731" opacity="0.4" />
+          {/* Cross lines */}
+          <line x1="40" y1="0" x2="40" y2="16" stroke="#F5B731" strokeWidth="0.6" opacity="0.3" />
+          <line x1="40" y1="64" x2="40" y2="80" stroke="#F5B731" strokeWidth="0.6" opacity="0.3" />
+          <line x1="0" y1="40" x2="16" y2="40" stroke="#F5B731" strokeWidth="0.6" opacity="0.3" />
+          <line x1="64" y1="40" x2="80" y2="40" stroke="#F5B731" strokeWidth="0.6" opacity="0.3" />
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#kente)" opacity={opacity} />
+    </svg>
+  );
+}
+
 export default function HomePage() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   return (
     <div style={{ background: "var(--bg-primary)", minHeight: "100vh" }}>
 
-      {/* NAVBAR */}
+      {/* ── NAVBAR ── */}
       <nav style={{
         position: "sticky", top: 0, zIndex: 50,
-        background: "rgba(13,17,23,0.92)", backdropFilter: "blur(12px)",
-        borderBottom: "1px solid var(--border-subtle)",
-        height: 56, display: "flex", alignItems: "center",
-        justifyContent: "space-between", padding: "0 24px",
+        background: "rgba(15,10,6,0.92)", backdropFilter: "blur(16px)",
+        borderBottom: "1px solid rgba(196,87,42,0.2)",
+        height: 60, display: "flex", alignItems: "center",
+        justifyContent: "space-between", padding: "0 28px",
       }}>
-        <span style={{ fontFamily: "Georgia, serif", fontSize: 20, color: "var(--text-primary)" }}>Vuka</span>
-        <Link href="/auth/login" style={{ color: "var(--text-secondary)", fontSize: 14, textDecoration: "none" }}>
+        <span style={{
+          fontFamily: "'Playfair Display', Georgia, serif",
+          fontSize: 24, fontWeight: 700,
+          background: "linear-gradient(135deg, #C4572A, #F5B731)",
+          WebkitBackgroundClip: "text",
+          WebkitTextFillColor: "transparent",
+          backgroundClip: "text",
+        }}>
+          Vuka
+        </span>
+        <Link href="/auth/login" style={{
+          color: "var(--text-secondary)", fontSize: 14,
+          textDecoration: "none", padding: "6px 16px",
+          border: "1px solid rgba(196,87,42,0.3)", borderRadius: 6,
+          transition: "border-color 0.2s",
+        }}>
           Sign in
         </Link>
       </nav>
 
-      {/* HERO */}
-      <section style={{ maxWidth: 680, margin: "0 auto", padding: "80px 24px 64px" }}>
-        <p className="mono-label" style={{ marginBottom: 24 }}>
-          NSE Investing Education · Nairobi, Kenya
-        </p>
-        <h1 style={{
-          fontFamily: "Georgia, serif",
-          fontSize: "clamp(32px, 6vw, 52px)",
-          fontWeight: 400, lineHeight: 1.1, marginBottom: 24,
-          color: "var(--text-primary)",
-        }}>
-          Learn to invest on the<br />Nairobi Stock Exchange.
-        </h1>
-        <p style={{ fontSize: 18, lineHeight: 1.75, color: "var(--text-secondary)", marginBottom: 16 }}>
-          A free, structured course for Kenyan beginners.
-          Six lessons. No jargon. No broker commissions.
-          No financial products sold.
-        </p>
-        <div style={{ marginTop: 36, display: "flex", flexDirection: "column", gap: 12, alignItems: "flex-start" }}>
-          <Link href="/auth/signup" style={{
-            background: "var(--accent-green)", color: "#fff",
-            padding: "12px 28px", borderRadius: 8, textDecoration: "none",
-            fontSize: 15, fontWeight: 500, display: "inline-block",
-          }}>
-            Begin the course
-          </Link>
-          <p style={{ fontSize: 13, color: "var(--text-tertiary)", margin: 0 }}>
-            Free to start. No credit card. No broker account needed.
+      {/* ── HERO ── */}
+      <section style={{ position: "relative", overflow: "hidden", minHeight: "92vh", display: "flex", alignItems: "center" }}>
+
+        {/* Unsplash background photo */}
+        <div style={{
+          position: "absolute", inset: 0,
+          backgroundImage: "url('https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&w=1600&q=80')",
+          backgroundSize: "cover", backgroundPosition: "center",
+          opacity: 0.12,
+        }} />
+
+        {/* Dark gradient overlay — left heavy so text is readable */}
+        <div style={{
+          position: "absolute", inset: 0,
+          background: "linear-gradient(105deg, rgba(15,10,6,0.97) 50%, rgba(196,87,42,0.25) 100%)",
+        }} />
+
+        {/* African geometric pattern */}
+        <AfricanPattern opacity={0.09} />
+
+        {/* Glow orb — terracotta */}
+        <div style={{
+          position: "absolute", top: "10%", right: "5%",
+          width: 520, height: 520, borderRadius: "50%",
+          background: "radial-gradient(circle, rgba(196,87,42,0.18) 0%, transparent 70%)",
+          pointerEvents: "none",
+        }} />
+        {/* Glow orb — gold */}
+        <div style={{
+          position: "absolute", bottom: "5%", right: "25%",
+          width: 360, height: 360, borderRadius: "50%",
+          background: "radial-gradient(circle, rgba(245,183,49,0.10) 0%, transparent 70%)",
+          pointerEvents: "none",
+        }} />
+
+        {/* Content */}
+        <div style={{ position: "relative", zIndex: 1, maxWidth: 740, margin: "0 auto", padding: "80px 28px" }}>
+          <p className="mono-label" style={{ marginBottom: 20, color: "var(--accent-amber)", letterSpacing: "0.16em" }}>
+            NSE Investing Education · Nairobi, Kenya
           </p>
+
+          <h1 style={{
+            fontFamily: "'Playfair Display', Georgia, serif",
+            fontSize: "clamp(40px, 7vw, 72px)",
+            fontWeight: 900, lineHeight: 1.05, marginBottom: 28,
+            background: "linear-gradient(135deg, #F5ECD8 30%, #F5B731 100%)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            backgroundClip: "text",
+          }}>
+            Learn to invest on the<br />Nairobi Stock Exchange.
+          </h1>
+
+          <p style={{ fontSize: 18, lineHeight: 1.8, color: "var(--text-secondary)", marginBottom: 12, maxWidth: 560 }}>
+            A free, structured course for Kenyan beginners.
+            Six lessons. No jargon. No broker commissions.
+            No financial products sold.
+          </p>
+
+          <div style={{ marginTop: 40, display: "flex", flexDirection: "column", gap: 14, alignItems: "flex-start" }}>
+            <Link href="/auth/signup" style={{
+              background: "linear-gradient(135deg, #C4572A 0%, #F5B731 100%)",
+              color: "#0F0A06",
+              padding: "14px 36px", borderRadius: 8, textDecoration: "none",
+              fontSize: 16, fontWeight: 700, display: "inline-block",
+              boxShadow: "0 4px 24px rgba(196,87,42,0.35)",
+              transition: "transform 0.15s, box-shadow 0.15s",
+            }}>
+              Begin the course →
+            </Link>
+            <p style={{ fontSize: 13, color: "var(--text-tertiary)", margin: 0 }}>
+              Free to start. No credit card. No broker account needed.
+            </p>
+          </div>
         </div>
       </section>
 
-      {/* TRUST BAR */}
-      <section style={{ borderTop: "1px solid var(--border-subtle)", borderBottom: "1px solid var(--border-subtle)", padding: "28px 24px" }}>
-        <div style={{ maxWidth: 860, margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 20 }}>
+      {/* ── TRUST BAR ── */}
+      <section style={{
+        background: "var(--bg-secondary)",
+        borderTop: "1px solid rgba(196,87,42,0.2)",
+        borderBottom: "1px solid rgba(196,87,42,0.2)",
+        padding: "28px 28px",
+      }}>
+        <div style={{ maxWidth: 900, margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 20 }}>
           {[
             { icon: "🛡", text: "No financial products sold" },
             { icon: "📖", text: "Content reviewed for accuracy" },
             { icon: "✂", text: "No affiliate broker links" },
             { icon: "👁", text: "Investment risks explained honestly" },
           ].map(item => (
-            <div key={item.text} style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <span style={{ fontSize: 16 }}>{item.icon}</span>
+            <div key={item.text} style={{ display: "flex", alignItems: "center", gap: 12 }}>
+              <span style={{ fontSize: 18 }}>{item.icon}</span>
               <span style={{ fontSize: 13, color: "var(--text-secondary)", fontWeight: 500 }}>{item.text}</span>
             </div>
           ))}
         </div>
       </section>
 
-      {/* CURRICULUM */}
-      <section style={{ maxWidth: 680, margin: "0 auto", padding: "72px 24px" }}>
-        <p className="mono-label" style={{ marginBottom: 16 }}>The course</p>
-        <h2 style={{ fontFamily: "Georgia, serif", fontSize: "clamp(24px, 4vw, 36px)", fontWeight: 400, marginBottom: 12 }}>
+      {/* ── CURRICULUM ── */}
+      <section style={{ maxWidth: 720, margin: "0 auto", padding: "80px 28px" }}>
+        <p className="mono-label" style={{ marginBottom: 16, color: "var(--accent-amber)" }}>The course</p>
+        <h2 style={{
+          fontFamily: "'Playfair Display', Georgia, serif",
+          fontSize: "clamp(28px, 4vw, 42px)", fontWeight: 700, marginBottom: 12,
+        }}>
           Six lessons. One clear path.
         </h2>
-        <p style={{ color: "var(--text-secondary)", fontSize: 15, marginBottom: 48, lineHeight: 1.7 }}>
+        <p style={{ color: "var(--text-secondary)", fontSize: 15, marginBottom: 52, lineHeight: 1.7 }}>
           Each lesson builds on the last. Most learners finish in 2–3 weeks. Go at your own pace.
         </p>
         <div style={{ display: "flex", flexDirection: "column" }}>
           {LESSONS_PREVIEW.map((lesson, i) => (
             <div key={lesson.num} style={{
-              display: "flex", gap: 20, padding: "20px 0",
+              display: "flex", gap: 24, padding: "22px 0",
               borderBottom: i < 5 ? "1px solid var(--border-subtle)" : "none",
             }}>
-              <span className="mono-label" style={{ minWidth: 24, paddingTop: 3 }}>{lesson.num}</span>
+              <span style={{
+                fontFamily: "Courier New, monospace", fontSize: 12,
+                color: "var(--accent-amber)", minWidth: 24, paddingTop: 3,
+                letterSpacing: "0.08em",
+              }}>
+                {lesson.num}
+              </span>
               <div>
                 <p style={{ fontSize: 15, fontWeight: 500, color: "var(--text-primary)", margin: "0 0 4px" }}>{lesson.title}</p>
                 <p style={{ fontSize: 13, color: "var(--text-secondary)", margin: "0 0 6px", lineHeight: 1.6 }}>{lesson.desc}</p>
@@ -127,19 +232,28 @@ export default function HomePage() {
             </div>
           ))}
         </div>
-        <p style={{ marginTop: 32, fontSize: 14, color: "var(--text-secondary)", fontStyle: "italic", lineHeight: 1.7 }}>
+        <p style={{ marginTop: 36, fontSize: 14, color: "var(--text-secondary)", fontStyle: "italic", lineHeight: 1.7 }}>
           After completing these six lessons, you will understand the NSE well enough to make an informed first investment. Not a guaranteed one. An informed one.
         </p>
       </section>
 
-      {/* WHAT VUKA IS NOT */}
-      <section style={{ background: "var(--bg-secondary)", padding: "72px 24px" }}>
-        <div style={{ maxWidth: 680, margin: "0 auto" }}>
-          <p className="mono-label" style={{ marginBottom: 16 }}>Important</p>
-          <h2 style={{ fontFamily: "Georgia, serif", fontSize: "clamp(24px, 4vw, 36px)", fontWeight: 400, marginBottom: 16 }}>
+      {/* ── WHAT VUKA IS NOT ── */}
+      <section style={{
+        position: "relative", overflow: "hidden",
+        background: "var(--bg-secondary)",
+        padding: "80px 28px",
+        borderTop: "1px solid var(--border-subtle)",
+      }}>
+        <AfricanPattern opacity={0.04} />
+        <div style={{ position: "relative", zIndex: 1, maxWidth: 720, margin: "0 auto" }}>
+          <p className="mono-label" style={{ marginBottom: 16, color: "var(--accent-amber)" }}>Important</p>
+          <h2 style={{
+            fontFamily: "'Playfair Display', Georgia, serif",
+            fontSize: "clamp(28px, 4vw, 40px)", fontWeight: 700, marginBottom: 16,
+          }}>
             What this is not
           </h2>
-          <p style={{ color: "var(--text-secondary)", fontSize: 15, marginBottom: 40, lineHeight: 1.7 }}>
+          <p style={{ color: "var(--text-secondary)", fontSize: 15, marginBottom: 44, lineHeight: 1.7 }}>
             Investment scams are common in Kenya. You should know exactly what Vuka is and is not before spending any time here.
           </p>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 16 }}>
@@ -148,24 +262,31 @@ export default function HomePage() {
               { title: "Not a signal service", body: "We will never tell you what to buy. Anyone who tells you which stock to buy and claims it will definitely rise is not educating you." },
               { title: "Not a get-rich scheme", body: "Investing takes time. Years. We show you what realistic long-term NSE returns have looked like — not the best year. The average year." },
             ].map(card => (
-              <div key={card.title} style={{ background: "var(--bg-primary)", border: "1px solid var(--border-default)", borderRadius: 10, padding: 24 }}>
-                <p style={{ color: "var(--error)", fontSize: 13, fontWeight: 500, marginBottom: 8 }}>✗ {card.title}</p>
-                <p style={{ fontSize: 13, color: "var(--text-secondary)", lineHeight: 1.6, margin: 0 }}>{card.body}</p>
+              <div key={card.title} style={{
+                background: "var(--bg-primary)",
+                border: "1px solid rgba(196,87,42,0.2)",
+                borderRadius: 12, padding: 24,
+              }}>
+                <p style={{ color: "var(--accent-green)", fontSize: 13, fontWeight: 600, marginBottom: 8 }}>✗ {card.title}</p>
+                <p style={{ fontSize: 13, color: "var(--text-secondary)", lineHeight: 1.7, margin: 0 }}>{card.body}</p>
               </div>
             ))}
           </div>
-          <div style={{ marginTop: 32, padding: "20px 0", borderTop: "1px solid var(--border-subtle)" }}>
-            <p style={{ fontSize: 14, color: "var(--text-secondary)", lineHeight: 1.75, margin: 0 }}>
+          <div style={{ marginTop: 36, padding: "20px 0", borderTop: "1px solid var(--border-subtle)" }}>
+            <p style={{ fontSize: 14, color: "var(--text-secondary)", lineHeight: 1.8, margin: 0 }}>
               If you have seen WhatsApp groups promising 30% monthly returns, forex trading bots, or crypto investment packages from a friend — this course explains why those are dangerous and what real investing actually looks like.
             </p>
           </div>
         </div>
       </section>
 
-      {/* FAQ */}
-      <section style={{ maxWidth: 680, margin: "0 auto", padding: "72px 24px" }}>
-        <p className="mono-label" style={{ marginBottom: 16 }}>Questions</p>
-        <h2 style={{ fontFamily: "Georgia, serif", fontSize: "clamp(24px, 4vw, 32px)", fontWeight: 400, marginBottom: 40 }}>
+      {/* ── FAQ ── */}
+      <section style={{ maxWidth: 720, margin: "0 auto", padding: "80px 28px" }}>
+        <p className="mono-label" style={{ marginBottom: 16, color: "var(--accent-amber)" }}>Questions</p>
+        <h2 style={{
+          fontFamily: "'Playfair Display', Georgia, serif",
+          fontSize: "clamp(26px, 4vw, 36px)", fontWeight: 700, marginBottom: 44,
+        }}>
           Questions we get asked
         </h2>
         {FAQ_ITEMS.map((item, i) => (
@@ -181,12 +302,12 @@ export default function HomePage() {
               <span style={{ fontSize: 15, fontWeight: 500, color: "var(--text-primary)", lineHeight: 1.5 }}>
                 {item.q}
               </span>
-              <span style={{ color: "var(--text-tertiary)", fontSize: 18, flexShrink: 0 }}>
+              <span style={{ color: "var(--accent-amber)", fontSize: 20, flexShrink: 0, fontWeight: 300 }}>
                 {openFaq === i ? "−" : "+"}
               </span>
             </button>
             {openFaq === i && (
-              <p style={{ fontSize: 14, color: "var(--text-secondary)", lineHeight: 1.75, paddingBottom: 20, margin: 0 }}>
+              <p style={{ fontSize: 14, color: "var(--text-secondary)", lineHeight: 1.8, paddingBottom: 20, margin: 0 }}>
                 {item.a}
               </p>
             )}
@@ -194,29 +315,52 @@ export default function HomePage() {
         ))}
       </section>
 
-      {/* FINAL CTA */}
-      <section style={{ maxWidth: 680, margin: "0 auto", padding: "48px 24px 80px", textAlign: "center" }}>
-        <h2 style={{ fontFamily: "Georgia, serif", fontSize: "clamp(24px, 4vw, 32px)", fontWeight: 400, marginBottom: 16 }}>
-          The course takes about three weeks.
-        </h2>
-        <p style={{ color: "var(--text-secondary)", fontSize: 15, marginBottom: 32, lineHeight: 1.7 }}>
-          20–30 minutes per lesson. No deadline. No streak pressure.<br />
-          Just the information you need.
-        </p>
-        <Link href="/auth/signup" style={{
-          background: "var(--accent-green)", color: "#fff",
-          padding: "12px 32px", borderRadius: 8, textDecoration: "none",
-          fontSize: 15, fontWeight: 500, display: "inline-block",
-        }}>
-          Begin the course
-        </Link>
-        <p style={{ fontSize: 13, color: "var(--text-tertiary)", marginTop: 12 }}>
-          Free. No credit card. No broker account needed to start.
-        </p>
+      {/* ── FINAL CTA ── */}
+      <section style={{
+        position: "relative", overflow: "hidden",
+        background: "var(--bg-secondary)",
+        padding: "80px 28px",
+        borderTop: "1px solid var(--border-subtle)",
+        textAlign: "center",
+      }}>
+        <AfricanPattern opacity={0.05} />
+        <div style={{ position: "relative", zIndex: 1, maxWidth: 600, margin: "0 auto" }}>
+          <h2 style={{
+            fontFamily: "'Playfair Display', Georgia, serif",
+            fontSize: "clamp(28px, 4vw, 40px)", fontWeight: 700, marginBottom: 16,
+            background: "linear-gradient(135deg, #F5ECD8 30%, #F5B731 100%)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            backgroundClip: "text",
+          }}>
+            The course takes about three weeks.
+          </h2>
+          <p style={{ color: "var(--text-secondary)", fontSize: 16, marginBottom: 40, lineHeight: 1.8 }}>
+            20–30 minutes per lesson. No deadline. No streak pressure.<br />
+            Just the information you need.
+          </p>
+          <Link href="/auth/signup" style={{
+            background: "linear-gradient(135deg, #C4572A 0%, #F5B731 100%)",
+            color: "#0F0A06",
+            padding: "15px 44px", borderRadius: 8, textDecoration: "none",
+            fontSize: 16, fontWeight: 700, display: "inline-block",
+            boxShadow: "0 4px 28px rgba(196,87,42,0.4)",
+          }}>
+            Begin the course →
+          </Link>
+          <p style={{ fontSize: 13, color: "var(--text-tertiary)", marginTop: 14 }}>
+            Free. No credit card. No broker account needed to start.
+          </p>
+        </div>
       </section>
 
-      {/* FOOTER */}
-      <footer style={{ borderTop: "1px solid var(--border-subtle)", padding: "24px", textAlign: "center" }}>
+      {/* ── FOOTER ── */}
+      <footer style={{
+        borderTop: "1px solid rgba(196,87,42,0.2)",
+        padding: "28px",
+        textAlign: "center",
+        background: "var(--bg-primary)",
+      }}>
         <p style={{ fontSize: 13, color: "var(--text-tertiary)", margin: 0 }}>
           © 2025 Vuka · NSE Investing Education · No financial products sold
         </p>
